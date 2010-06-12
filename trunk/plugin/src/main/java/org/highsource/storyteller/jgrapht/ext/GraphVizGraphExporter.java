@@ -9,7 +9,6 @@ import java.io.InputStreamReader;
 import java.io.Writer;
 
 import org.apache.maven.plugin.logging.Log;
-import org.jfrog.maven.annomojo.annotations.MojoParameter;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.ext.DOTExporter;
 import org.jgrapht.ext.IntegerNameProvider;
@@ -17,19 +16,9 @@ import org.jgrapht.ext.VertexNameProvider;
 
 public abstract class GraphVizGraphExporter<V, E> implements
 		GraphExporter<V, E> {
-	private final File graphVizDotFile;
+	private final String graphVizDotFile;
 
-	/**
-	 * The plugin uses GraphViz package to render graphs in formats like PDF and
-	 * so on. For this to work, you'll need to specify the path to the
-	 * executable <code>dot</code> of GraphViz in this property.
-	 */
-	@MojoParameter(expression = "${graphViz.dotFile}")
-	public File getGraphVizDotFile() {
-		return graphVizDotFile;
-	}
-
-	public GraphVizGraphExporter(File graphVizDotFile) {
+	public GraphVizGraphExporter(String graphVizDotFile) {
 		super();
 		this.graphVizDotFile = graphVizDotFile;
 	}
@@ -40,7 +29,7 @@ public abstract class GraphVizGraphExporter<V, E> implements
 			VertexNameProvider<V> vertexNameProvider, File targetFile, Log log)
 			throws IOException {
 
-		if (getGraphVizDotFile() == null) {
+		if (graphVizDotFile == null) {
 			log
 					.warn("Could not export graph to ["
 							+ targetFile.getAbsolutePath()
@@ -68,7 +57,7 @@ public abstract class GraphVizGraphExporter<V, E> implements
 			}
 
 		}
-		final String command = getGraphVizDotFile().getAbsolutePath();
+		final String command = graphVizDotFile;
 		final Process process = Runtime.getRuntime().exec(
 
 				new String[] { command, "-o", targetFile.getAbsolutePath(),

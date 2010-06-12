@@ -17,6 +17,7 @@ import org.jgrapht.graph.DefaultEdge;
 
 public interface ArtifactGraphBuilder {
 
+	@SuppressWarnings("unchecked")
 	public DirectedGraph<Artifact, DefaultEdge> buildArtifactGraph(
 			Set<Artifact> artifacts, Artifact originatingArtifact,
 			Map managedVersions, ArtifactRepository localRepository,

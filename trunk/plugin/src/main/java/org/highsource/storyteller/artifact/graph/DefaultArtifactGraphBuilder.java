@@ -25,6 +25,7 @@ public class DefaultArtifactGraphBuilder implements ArtifactGraphBuilder {
 
 	private ArtifactMetadataSource artifactMetadataSource;
 
+	@SuppressWarnings("unchecked")
 	public DirectedGraph<Artifact, DefaultEdge> buildArtifactGraph(
 			Set<Artifact> artifacts, Artifact originatingArtifact,
 			Map managedVersions, ArtifactRepository localRepository,

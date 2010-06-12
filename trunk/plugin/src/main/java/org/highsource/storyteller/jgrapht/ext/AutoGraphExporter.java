@@ -14,7 +14,7 @@ public class AutoGraphExporter<V, E> implements GraphExporter<V, E> {
 
 	private final Map<String, GraphExporter<V, E>> exporters;
 
-	public AutoGraphExporter(final File graphVizDotFile) {
+	public AutoGraphExporter(final String graphVizDotFile) {
 		final Map<String, GraphExporter<V, E>> exporters = new HashMap<String, GraphExporter<V, E>>();
 
 		exporters.put("dot", new DOTGraphExporter<V, E>());
