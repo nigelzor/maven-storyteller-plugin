@@ -53,6 +53,7 @@
 			<id>maven-storyteller-plugin.googlecode.com</id>
 			<name>maven-storyteller-plugin Google Code SNAPSHOT Repository</name>
 			<url>svn:https://maven-storyteller-plugin.googlecode.com/svn/snapshots</url>
+			<uniqueVersion>false</uniqueVersion>
 		</snapshotRepository>
 		<site>
 			<url>svn:https://maven-storyteller-plugin.googlecode.com/svn/site</url>
