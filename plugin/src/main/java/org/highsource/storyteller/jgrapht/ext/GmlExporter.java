@@ -7,7 +7,6 @@ import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.ext.EdgeNameProvider;
-import org.jgrapht.ext.IntegerNameProvider;
 import org.jgrapht.ext.VertexNameProvider;
 
 
@@ -42,22 +41,22 @@ public class GmlExporter<V, E>
     /**
      * Option to export no vertex or edge labels.
      */
-    public static final Integer PRINT_NO_LABELS = 1;
+    public static final int PRINT_NO_LABELS = 1;
 
     /**
      * Option to export only the edge labels.
      */
-    public static final Integer PRINT_EDGE_LABELS = 2;
+    public static final int PRINT_EDGE_LABELS = 2;
 
     /**
      * Option to export both edge and vertex labels.
      */
-    public static final Integer PRINT_EDGE_VERTEX_LABELS = 3;
+    public static final int PRINT_EDGE_VERTEX_LABELS = 3;
 
     /**
      * Option to export only the vertex labels.
      */
-    public static final Integer PRINT_VERTEX_LABELS = 4;
+    public static final int PRINT_VERTEX_LABELS = 4;
 
     //~ Instance fields --------------------------------------------------------
 
@@ -129,7 +128,7 @@ public class GmlExporter<V, E>
             {
                 out.println(tab2 + "label" + delim + quoted(edgeLabelProvider.getEdgeName(edge)));
             }
-            if (g instanceof DirectedGraph)
+            if (g instanceof DirectedGraph<?,?>)
             {
                 out.println(tab2 + "graphics");
                 out.println(tab2 + "[");

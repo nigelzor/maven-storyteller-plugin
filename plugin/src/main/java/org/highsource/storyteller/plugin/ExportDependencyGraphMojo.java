@@ -40,15 +40,16 @@ public class ExportDependencyGraphMojo extends AbstractDependencyGraphMojo {
 	 * so on. For this to work, you'll need to specify the path to the
 	 * executable <code>dot</code> of GraphViz in this property.
 	 */
-	@MojoParameter(expression = "${graphViz.dotFile}")
-	public File getGraphVizDotFile() {
+	@MojoParameter(expression = "${graphViz.dotFile}", defaultValue="dot")
+	public String getGraphVizDotFile() {
 		return graphVizDotFile;
 	}
 
-	public void setGraphVizDotFile(File dot) {
+	public void setGraphVizDotFile(String dot) {
 		this.graphVizDotFile = dot;
 	}
 
+	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		super.execute();
 

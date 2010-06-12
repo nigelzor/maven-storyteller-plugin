@@ -156,7 +156,7 @@ public abstract class AbstractDependencyGraphMojo extends AbstractMojo {
 	}
 
 	protected File dependencyGraphFile;
-	protected File graphVizDotFile;
+	protected String graphVizDotFile;
 	protected Set<Artifact> dependencyArtifacts;
 	protected DirectedGraph<Artifact, DefaultEdge> artifactGraph;
 	protected Map<Artifact, MArchive> archives;

@@ -1,10 +1,8 @@
 package org.highsource.storyteller.jgrapht.ext;
 
-import java.io.File;
-
 public class PNGGraphExporter<V, E> extends GraphVizGraphExporter<V, E> {
 
-	public PNGGraphExporter(File graphVizDotFile) {
+	public PNGGraphExporter(String graphVizDotFile) {
 		super(graphVizDotFile);
 	}
 
