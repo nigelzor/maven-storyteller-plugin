@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>org.highsource.storyteller</groupId>
+  <artifactId>maven-storyteller-plugin-project</artifactId>
+  <version>0.1-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <timestamp>20100612.215835</timestamp>
+      <buildNumber>1</buildNumber>
+    </snapshot>
+    <lastUpdated>20100612215848</lastUpdated>
+  </versioning>
+</metadata>
