@@ -25,12 +25,12 @@ import org.jgrapht.graph.DefaultEdge;
 @MojoRequiresProject(false)
 public class DisplayDependencyGraphMojo extends AbstractDependencyGraphMojo {
 
+	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
 
 		super.execute();
 		final StringWriter sw = new StringWriter();
-		displayGraph(this.artifactGraph, getProject().getArtifact(), "", true,
-				new PrintWriter(sw));
+		displayGraph(this.artifactGraph, project.getArtifact(), "", true, new PrintWriter(sw));
 
 		BufferedReader reader = null;
 		try {
@@ -44,8 +44,7 @@ public class DisplayDependencyGraphMojo extends AbstractDependencyGraphMojo {
 
 			reader.close();
 		} catch (IOException ioex) {
-			throw new MojoExecutionException(
-					"Error displaying dependency graph.", ioex);
+			throw new MojoExecutionException("Error displaying dependency graph.", ioex);
 		} finally {
 			IOUtil.close(reader);
 		}
@@ -56,24 +55,23 @@ public class DisplayDependencyGraphMojo extends AbstractDependencyGraphMojo {
 	public static String FILL_INDENT = "|  ";
 	public static String LAST_FILL_INDENT = "   ";
 
-	public void displayGraph(DirectedGraph<Artifact, DefaultEdge> graph,
-			Artifact node, String indent, boolean last, PrintWriter writer) {
+	public void displayGraph(DirectedGraph<Artifact, DefaultEdge> graph, Artifact node, String indent, boolean last,
+			PrintWriter writer) {
 		writer.print(indent);
 		writer.print(last ? LAST_NODE_INDENT : NODE_INDENT);
 		writer.println(node.getId());
 
 		final Set<DefaultEdge> outgoingEdges = graph.outgoingEdgesOf(node);
 
-		for (final Iterator<DefaultEdge> outgoingEdgesIterator = outgoingEdges
-				.iterator(); outgoingEdgesIterator.hasNext();) {
+		for (final Iterator<DefaultEdge> outgoingEdgesIterator = outgoingEdges.iterator(); outgoingEdgesIterator
+				.hasNext();) {
 
 			final DefaultEdge edge = outgoingEdgesIterator.next();
 
 			final Artifact childNode = graph.getEdgeTarget(edge);
 
-			displayGraph(graph, childNode, indent
-					+ (last ? LAST_FILL_INDENT : FILL_INDENT),
-					!outgoingEdgesIterator.hasNext(), writer);
+			displayGraph(graph, childNode, indent + (last ? LAST_FILL_INDENT : FILL_INDENT), !outgoingEdgesIterator
+					.hasNext(), writer);
 		}
 
 	}

@@ -24,16 +24,8 @@ public class ExportDependencyGraphMojo extends AbstractDependencyGraphMojo {
 
 	protected GraphExporter<Artifact, DefaultEdge> graphExporter;
 
-	private File file;
-
 	@MojoParameter(required = true, expression = "${file}", defaultValue = "graphFile.graphml")
-	public File getFile() {
-		return file;
-	}
-
-	public void setFile(File file) {
-		this.file = file;
-	}
+	private File file;
 
 	/**
 	 * The plugin uses GraphViz package to render graphs in formats like PDF and
@@ -41,26 +33,18 @@ public class ExportDependencyGraphMojo extends AbstractDependencyGraphMojo {
 	 * executable <code>dot</code> of GraphViz in this property.
 	 */
 	@MojoParameter(expression = "${graphViz.dotFile}", defaultValue = "dot")
-	public String getGraphVizDotFile() {
-		return graphVizDotFile;
-	}
-
-	public void setGraphVizDotFile(String dot) {
-		this.graphVizDotFile = dot;
-	}
+	protected String graphVizDotFile;
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		super.execute();
 
 		// Create a graph exporter
-		this.graphExporter = new AutoGraphExporter<Artifact, DefaultEdge>(
-				getGraphVizDotFile());
+		this.graphExporter = new AutoGraphExporter<Artifact, DefaultEdge>(graphVizDotFile);
 		// Export archive dependency graph
 		try {
-			this.graphExporter.exportGraph(artifactGraph,
-					VertexNameProviders.ARTIFACT_VERTEX_NAME_PROVIDER,
-					getFile(), getLog());
+			this.graphExporter.exportGraph(artifactGraph, VertexNameProviders.ARTIFACT_VERTEX_NAME_PROVIDER, file,
+					getLog());
 		} catch (IOException ioex) {
 			throw new MojoExecutionException("Error exporting graph.", ioex);
 		}
