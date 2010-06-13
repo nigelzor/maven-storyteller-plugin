@@ -12,18 +12,17 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.plexus.util.IOUtil;
-import org.jfrog.maven.annomojo.annotations.MojoGoal;
-import org.jfrog.maven.annomojo.annotations.MojoPhase;
-import org.jfrog.maven.annomojo.annotations.MojoRequiresDependencyResolution;
-import org.jfrog.maven.annomojo.annotations.MojoRequiresProject;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 
-@MojoGoal("display-dependency-graph")
-@MojoPhase("verify")
-@MojoRequiresDependencyResolution("test")
-@MojoRequiresProject(false)
-public class DisplayDependencyGraphMojo extends AbstractDependencyGraphMojo {
+/**
+ * Display the dependency graph of the current project, or of a specified artifact.
+ * @goal display-dependency-graph
+ * @phase verify
+ * @requiresDependencyResolution test
+ * @requiresProject false
+ */
+public class DisplayDependencyGraphMojo extends AbstractSpecifiableArtifactDependencyGraphMojo {
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {

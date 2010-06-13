@@ -21,9 +21,6 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.metadata.ArtifactMetadataSource;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.repository.DefaultArtifactRepository;
-import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
-import org.apache.maven.artifact.repository.layout.LegacyRepositoryLayout;
 import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.ArtifactResolver;
@@ -32,15 +29,12 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
-import org.apache.maven.project.ProjectBuildingException;
 import org.apache.maven.project.artifact.InvalidDependencyVersionException;
 import org.apache.maven.project.artifact.MavenMetadataSource;
 import org.highsource.storyteller.artifact.MArchive;
 import org.highsource.storyteller.artifact.MClass;
 import org.highsource.storyteller.artifact.graph.ArtifactGraphBuilder;
 import org.highsource.storyteller.plexus.logging.LogToLoggerAdapter;
-import org.jfrog.maven.annomojo.annotations.MojoComponent;
-import org.jfrog.maven.annomojo.annotations.MojoParameter;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
@@ -49,53 +43,50 @@ public abstract class AbstractDependencyGraphMojo extends AbstractMojo {
 
 	protected static final String HR = "------------------------------------------------------------------------------------------";
 
-	@MojoComponent
+	/**
+	 * @component
+	 */
 	protected ArtifactResolver artifactResolver;
 
-	@MojoComponent
+	/**
+	 * @component
+	 */
 	protected ArtifactMetadataSource artifactMetadataSource;
 
-	@MojoComponent
+	/**
+	 * @component
+	 */
 	protected ArtifactFactory artifactFactory;
 
-	@MojoParameter(expression = "${localRepository}", required = true, readonly = true)
+	/**
+	 * @parameter expression="${localRepository}"
+	 * @required
+	 * @readonly
+	 */
 	protected ArtifactRepository localRepository;
 
-	@MojoComponent(role = "org.apache.maven.project.MavenProjectBuilder")
+	/**
+	 * @component role="org.apache.maven.project.MavenProjectBuilder"
+	 */
 	protected MavenProjectBuilder mavenProjectBuilder;
 
-	@MojoComponent
-	private ArtifactGraphBuilder artifactGraphBuilder;
+	/**
+	 * @component
+	 */
+	protected ArtifactGraphBuilder artifactGraphBuilder;
 
-	@MojoParameter(expression = "${project.remoteArtifactRepositories}", readonly = true, required = true)
-	private List<ArtifactRepository> remoteArtifactRepositories;
+	/**
+	 * @parameter expression="${project.remoteArtifactRepositories}"
+	 * @required
+	 * @readonly
+	 */
+	protected List<ArtifactRepository> remoteArtifactRepositories;
 
-	@MojoParameter(expression = "${project}", required = false, readonly = true)
+	/**
+	 * @parameter expression="${project}"
+	 * @readonly
+	 */
 	protected MavenProject project;
-
-	@MojoParameter(expression = "${groupId}", required = false, readonly = true)
-	private String groupId;
-
-	@MojoParameter(expression = "${artifactId}", required = false, readonly = true)
-	private String artifactId;
-
-	@MojoParameter(expression = "${version}", required = false, readonly = true)
-	private String version;
-
-	@MojoParameter(expression = "${type}", required = false, readonly = true, defaultValue = "jar")
-	private String type = "jar";
-
-	@MojoParameter(expression = "${classifier}", required = false, readonly = true)
-	private String classifier;
-
-	@MojoParameter(expression = "${repositoryId}", required = false, readonly = true, defaultValue = "default")
-	private String repositoryId;
-
-	@MojoParameter(expression = "${repositoryURL}", required = false, readonly = true)
-	private String repositoryURL;
-
-	@MojoParameter(expression = "${repositoryLayout}", required = false, readonly = false)
-	private String repositoryLayout;
 
 	/**
 	 * Creates dependency artifacts for the current project.
@@ -258,9 +249,6 @@ public abstract class AbstractDependencyGraphMojo extends AbstractMojo {
 	protected DirectedGraph<MArchive, DefaultEdge> archiveDependencyGraph;
 
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		initSpecifiedRepository();
-		initSpecifiedProject();
-
 		getLog().debug(HR);
 		// Get the artifacts for dependencies
 		dependencyArtifacts = createDependencyArtifacts();
@@ -271,27 +259,6 @@ public abstract class AbstractDependencyGraphMojo extends AbstractMojo {
 		archives = createArchives(artifactGraph.vertexSet());
 		// Create an archive dependency graph out of artifact dependency graph
 		archiveDependencyGraph = buildArchiveDependencyGraph(artifactGraph, archives);
-	}
-
-	private void initSpecifiedProject() throws MojoExecutionException {
-		if (groupId != null && artifactId != null && version != null) {
-			final Artifact artifact = artifactFactory.createArtifactWithClassifier(groupId, artifactId, version, type,
-					classifier);
-
-			try {
-				project = mavenProjectBuilder
-						.buildFromRepository(artifact, remoteArtifactRepositories, localRepository);
-			} catch (ProjectBuildingException pbex) {
-				throw new MojoExecutionException("Could not create the project for [" + artifactId + "].", pbex);
-			}
-		}
-	}
-
-	private void initSpecifiedRepository() {
-		if (repositoryURL != null) {
-			remoteArtifactRepositories.add(new DefaultArtifactRepository(repositoryId, repositoryURL,
-					"legacy".equals(repositoryLayout) ? new LegacyRepositoryLayout() : new DefaultRepositoryLayout()));
-		}
 	}
 
 }
