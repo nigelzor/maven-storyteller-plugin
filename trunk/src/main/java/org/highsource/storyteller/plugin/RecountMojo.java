@@ -24,54 +24,47 @@ import org.highsource.storyteller.artifact.MPackage;
 import org.highsource.storyteller.artifact.graph.alg.DescendantsInspector;
 import org.highsource.storyteller.artifact.graph.ext.VertexNameProviders;
 import org.highsource.storyteller.jgrapht.ext.AutoGraphExporter;
-import org.jfrog.maven.annomojo.annotations.MojoGoal;
-import org.jfrog.maven.annomojo.annotations.MojoParameter;
-import org.jfrog.maven.annomojo.annotations.MojoPhase;
-import org.jfrog.maven.annomojo.annotations.MojoRequiresDependencyResolution;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.ext.VertexNameProvider;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 
-@MojoGoal("recount")
-@MojoRequiresDependencyResolution("test")
-@MojoPhase("verify")
+/**
+ * @goal recount
+ * @phase verify
+ * @requiresDependencyResolution test
+ */
 public class RecountMojo extends AbstractDependencyGraphMojo {
-
-	private static final String HR = "------------------------------------------------------------------------------------------";
 
 	/**
 	 * If specified, the plugin renders archive dependency graph into this file.
+	 * @parameter expression="${archiveDependencyGraphFile}" default-value="target/storyteller/archiveDependencyGraphFile.gml"
 	 */
-	@MojoParameter(expression = "${archiveDependencyGraphFile}", defaultValue = "target/storyteller/archiveDependencyGraphFile.gml")
 	private File archiveDependencyGraphFile;
 
 	/**
 	 * If specified, the plugin renders class dependency graph into this file.
+	 * @parameter expression="${classDependencyGraphFile}" default-value="target/storyteller/classDependencyGraph.gml"
 	 */
-	@MojoParameter(expression = "${classDependencyGraphFile}", defaultValue = "target/storyteller/classDependencyGraph.gml")
 	private File classDependencyGraphFile;
 
 	/**
-	 * If specified, the plugin renders "rooted" class dependency graph into
-	 * this file.
+	 * If specified, the plugin renders "rooted" class dependency graph into this file.
+	 * @parameter expression="${rootedClassDependencyGraphFile}" default-value="target/storyteller/rootedClassDependencyGraph.gml"
 	 */
-	@MojoParameter(expression = "${rootedClassDependencyGraphFile}", defaultValue = "target/storyteller/rootedClassDependencyGraph.gml")
 	private File rootedClassDependencyGraphFile;
 
 	/**
-	 * If specified, the plugin renders "rooted" archive dependency graph into
-	 * this file.
+	 * If specified, the plugin renders "rooted" archive dependency graph into this file.
+	 * @parameter expression="${rootedArchiveDependencyGraphFile}" default-value="target/storyteller/rootedArchiveDependencyGraph.gml"
 	 */
-	@MojoParameter(expression = "${rootedArchiveDependencyGraphFile}", defaultValue = "target/storyteller/rootedArchiveDependencyGraph.pdf")
 	private File rootedArchiveDependencyGraphFile;
 
 	/**
-	 * The plugin uses GraphViz package to render graphs in formats like PDF and
-	 * so on. For this to work, you'll need to specify the path to the
-	 * executable <code>dot</code> of GraphViz in this property.
+	 * The plugin uses GraphViz package to render graphs in formats like PDF and so on. If the <code>dot</code>
+	 * executable is not in PATH, it can be specified manually here.
+	 * @parameter expression="${graphViz.dotFile}" default-value="dot"
 	 */
-	@MojoParameter(expression = "${graphViz.dotFile}", defaultValue = "dot")
 	private String graphVizDotFile;
 
 	private DirectedGraph<MClass, DefaultEdge> classDependencyGraph;
@@ -449,7 +442,6 @@ public class RecountMojo extends AbstractDependencyGraphMojo {
 				}
 			}
 		}
-
 		getLog().info(HR);
 	}
 
