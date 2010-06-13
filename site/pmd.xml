@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="4.2.5" timestamp="2010-06-13T01:30:21.797">
+<file name="/home/nigelzor/workspace/maven-storyteller-plugin/trunk/src/main/java/org/highsource/storyteller/jgrapht/ext/DOTGraphExporter.java">
+<violation beginline="30" endline="32" begincolumn="35" endcolumn="33" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.highsource.storyteller.jgrapht.ext" class="DOTGraphExporter" method="exportGraph" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+</file>
+<file name="/home/nigelzor/workspace/maven-storyteller-plugin/trunk/src/main/java/org/highsource/storyteller/jgrapht/ext/GMLGraphExporter.java">
+<violation beginline="36" endline="38" begincolumn="35" endcolumn="33" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.highsource.storyteller.jgrapht.ext" class="GMLGraphExporter" method="exportGraph" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+</file>
+<file name="/home/nigelzor/workspace/maven-storyteller-plugin/trunk/src/main/java/org/highsource/storyteller/jgrapht/ext/GraphMLGraphExporter.java">
+<violation beginline="40" endline="42" begincolumn="35" endcolumn="33" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.highsource.storyteller.jgrapht.ext" class="GraphMLGraphExporter" method="exportGraph" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+</file>
+<file name="/home/nigelzor/workspace/maven-storyteller-plugin/trunk/src/main/java/org/highsource/storyteller/jgrapht/ext/GraphVizGraphExporter.java">
+<violation beginline="48" endline="50" begincolumn="35" endcolumn="33" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.highsource.storyteller.jgrapht.ext" class="GraphVizGraphExporter" method="exportGraph" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+</file>
+<file name="/home/nigelzor/workspace/maven-storyteller-plugin/trunk/src/main/java/org/highsource/storyteller/plugin/AbstractDependencyGraphMojo.java">
+<violation beginline="216" endline="218" begincolumn="59" endcolumn="57" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.highsource.storyteller.plugin" class="AbstractDependencyGraphMojo" method="createArchive" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+</file>
+<suppressedviolation filename="/home/nigelzor/workspace/maven-storyteller-plugin/trunk/src/main/java/org/highsource/storyteller/plugin/DependencyGraphResolutionListener.java" suppressiontype="annotation" msg="Avoid unused private fields such as 'logger'." usermsg=""/>
+</pmd>
