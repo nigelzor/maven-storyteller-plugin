@@ -38,7 +38,7 @@ public class RecountMojo extends AbstractDependencyGraphMojo {
 
 	/**
 	 * If specified, the plugin renders archive dependency graph into this file.
-	 * @parameter expression="${archiveDependencyGraphFile}" default-value="target/storyteller/archiveDependencyGraphFile.gml"
+	 * @parameter expression="${archiveDependencyGraphFile}" default-value="target/storyteller/archiveDependencyGraph.gml"
 	 */
 	private File archiveDependencyGraphFile;
 
