@@ -2,6 +2,7 @@ package org.highsource.storyteller.plugin;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 
@@ -19,12 +20,10 @@ public class DependencyGraphResolutionListener implements ResolutionListener {
 
 	private final DirectedGraph<Artifact, DefaultEdge> graph;
 
-	@SuppressWarnings("unused")
 	private final Logger logger;
 
 	public DependencyGraphResolutionListener(Logger logger) {
-		this.graph = new DefaultDirectedGraph<Artifact, DefaultEdge>(
-				DefaultEdge.class);
+		this.graph = new DefaultDirectedGraph<Artifact, DefaultEdge>(DefaultEdge.class);
 		this.logger = logger;
 	}
 
@@ -62,52 +61,77 @@ public class DependencyGraphResolutionListener implements ResolutionListener {
 	}
 
 	private void replaceNode(Artifact oldNode, Artifact newNode) {
+		if (oldNode.equals(newNode)) {
+			return;
+		}
+		
 		final Set<DefaultEdge> incomingEdges = graph.incomingEdgesOf(oldNode);
-		final Collection<Artifact> ins = new ArrayList<Artifact>(incomingEdges
-				.size());
+		final Collection<Artifact> ins = new ArrayList<Artifact>(incomingEdges.size());
 		for (DefaultEdge edge : incomingEdges) {
 			final Artifact node = graph.getEdgeSource(edge);
 			ins.add(node);
 		}
-		final Set<DefaultEdge> outgoingEdges = graph.outgoingEdgesOf(oldNode);
-		final Collection<Artifact> outs = new ArrayList<Artifact>(outgoingEdges
-				.size());
-
-		for (DefaultEdge edge : outgoingEdges) {
-			final Artifact node = graph.getEdgeTarget(edge);
-			outs.add(node);
-		}
-
+//		final Set<DefaultEdge> outgoingEdges = graph.outgoingEdgesOf(oldNode);
+//		final Collection<Artifact> outs = new ArrayList<Artifact>(outgoingEdges.size());
+//
+//		for (DefaultEdge edge : outgoingEdges) {
+//			final Artifact node = graph.getEdgeTarget(edge);
+//			outs.add(node);
+//		}
+		
+		removeOrphans(oldNode);
+		
 		graph.removeVertex(oldNode);
 		graph.addVertex(newNode);
 		for (Artifact in : ins) {
 			graph.addEdge(in, newNode);
 		}
-		for (Artifact out : outs) {
-			graph.addEdge(newNode, out);
+//		for (Artifact out : outs) {
+//			graph.addEdge(newNode, out);
+//		}
+	}
+
+	private void removeOrphans(Artifact oldNode) {
+		final Set<DefaultEdge> outgoingEdges = graph.outgoingEdgesOf(oldNode);
+		final Set<Artifact> orphaned = new HashSet<Artifact>();
+		for (DefaultEdge edge : outgoingEdges) {
+			final Artifact node = graph.getEdgeTarget(edge);
+			if (graph.inDegreeOf(node) == 1) {
+				orphaned.add(node);
+			}
+		}
+		for (Artifact node : orphaned) {
+			logger.debug("deletion of " + oldNode + " orphans " + node);
+			removeOrphans(node);
+			graph.removeVertex(node);
 		}
 	}
 
 	public void updateScope(Artifact artifact, String scope) {
+		logger.debug("updateScope " + artifact + ", " + scope);
 	}
 
 	public void manageArtifact(Artifact artifact, Artifact replacement) {
+		logger.debug("manageArtifact " + artifact + ", " + replacement);
 	}
 
 	public void omitForCycle(Artifact artifact) {
 		if (graph.containsVertex(artifact)) {
+			logger.debug("omitForCycle " + artifact);
 			graph.removeVertex(artifact);
 		}
 	}
 
 	public void updateScopeCurrentPom(Artifact artifact, String scopeIgnored) {
+		logger.debug("updateScopeCurrentPom " + artifact + ", " + scopeIgnored);
 	}
 
 	public void selectVersionFromRange(Artifact artifact) {
+		logger.debug("selectVersionFromRange " + artifact);
 	}
 
-	public void restrictRange(Artifact artifact, Artifact replacement,
-			VersionRange versionRange) {
+	public void restrictRange(Artifact artifact, Artifact replacement, VersionRange versionRange) {
+		logger.debug("restrictRange " + artifact + ", " + replacement + ", " + versionRange);
 	}
 
 	public DirectedGraph<Artifact, DefaultEdge> getGraph() {
