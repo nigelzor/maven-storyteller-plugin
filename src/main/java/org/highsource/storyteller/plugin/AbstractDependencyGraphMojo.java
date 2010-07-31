@@ -208,6 +208,11 @@ public abstract class AbstractDependencyGraphMojo extends AbstractMojo {
 							is = artifactJarFile.getInputStream(jarEntry);
 							ctClass = classPool.makeClass(is);
 						} catch (IOException ioex1) {
+							// (ugly workaround) this one class exists, corrupt, in icu4j-2.6.1.jar
+							String entry = artifactFile.getName() + "/" + jarEntry.getName();
+							if ("icu4j-2.6.1.jar/com/ibm/icu/impl/data/LocaleElements_zh__PINYIN.class".equals(entry)) {
+								continue;
+							}
 							throw new MojoExecutionException("Could not load class from JAR entry ["
 									+ artifactFile.getAbsolutePath() + "/" + jarEntry.getName() + "].");
 						} finally {

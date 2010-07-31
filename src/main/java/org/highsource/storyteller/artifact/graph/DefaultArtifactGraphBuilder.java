@@ -25,7 +25,7 @@ public class DefaultArtifactGraphBuilder implements ArtifactGraphBuilder {
 
 	private ArtifactMetadataSource artifactMetadataSource;
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public DirectedGraph<Artifact, DefaultEdge> buildArtifactGraph(
 			Set<Artifact> artifacts, Artifact originatingArtifact,
 			Map managedVersions, ArtifactRepository localRepository,
@@ -34,13 +34,12 @@ public class DefaultArtifactGraphBuilder implements ArtifactGraphBuilder {
 			List<ResolutionListener> listeners, Logger logger)
 			throws ArtifactNotFoundException, ArtifactResolutionException {
 
-		final DependencyGraphResolutionListener dependencyGraphResolutionListener = new DependencyGraphResolutionListener(
-				logger);
-		final DebugResolutionListener debugResolutionListener = new DebugResolutionListener(
-				logger);
+		final DependencyGraphResolutionListener dependencyGraphResolutionListener =
+				new DependencyGraphResolutionListener(logger);
+		final DebugResolutionListener debugResolutionListener = new DebugResolutionListener(logger);
 
-		final List<ResolutionListener> moreListeners = listeners != null ? new ArrayList<ResolutionListener>(
-				listeners)
+		final List<ResolutionListener> moreListeners = (listeners != null)
+				? new ArrayList<ResolutionListener>(listeners)
 				: new ArrayList<ResolutionListener>(2);
 		moreListeners.add(dependencyGraphResolutionListener);
 
@@ -49,8 +48,6 @@ public class DefaultArtifactGraphBuilder implements ArtifactGraphBuilder {
 				managedVersions, localRepository, remoteRepositories,
 				artifactMetadataSource, filter, moreListeners);
 
-		final DirectedGraph<Artifact, DefaultEdge> graph = dependencyGraphResolutionListener
-				.getGraph();
-		return graph;
+		return dependencyGraphResolutionListener.getGraph();
 	}
 }
