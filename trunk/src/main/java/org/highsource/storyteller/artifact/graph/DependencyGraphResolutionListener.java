@@ -1,4 +1,4 @@
-package org.highsource.storyteller.plugin;
+package org.highsource.storyteller.artifact.graph;
 
 import java.util.ArrayList;
 import java.util.Collection;

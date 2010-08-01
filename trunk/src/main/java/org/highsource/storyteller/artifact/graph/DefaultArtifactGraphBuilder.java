@@ -15,7 +15,6 @@ import org.apache.maven.artifact.resolver.DebugResolutionListener;
 import org.apache.maven.artifact.resolver.ResolutionListener;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.codehaus.plexus.logging.Logger;
-import org.highsource.storyteller.plugin.DependencyGraphResolutionListener;
 import org.jgrapht.DirectedGraph;
 
 public class DefaultArtifactGraphBuilder implements ArtifactGraphBuilder {
