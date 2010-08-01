@@ -12,8 +12,8 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.plexus.util.IOUtil;
+import org.highsource.storyteller.artifact.graph.VersionedEdge;
 import org.jgrapht.DirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
 
 /**
  * Display the dependency graph of the current project, or of a specified artifact.
@@ -54,18 +54,18 @@ public class DisplayDependencyGraphMojo extends AbstractSpecifiableArtifactDepen
 	public static String FILL_INDENT = "|  ";
 	public static String LAST_FILL_INDENT = "   ";
 
-	public void displayGraph(DirectedGraph<Artifact, DefaultEdge> graph, Artifact node, String indent, boolean last,
+	public void displayGraph(DirectedGraph<Artifact, VersionedEdge> graph, Artifact node, String indent, boolean last,
 			PrintWriter writer) {
 		writer.print(indent);
 		writer.print(last ? LAST_NODE_INDENT : NODE_INDENT);
 		writer.println(node.getId());
 
-		final Set<DefaultEdge> outgoingEdges = graph.outgoingEdgesOf(node);
+		final Set<VersionedEdge> outgoingEdges = graph.outgoingEdgesOf(node);
 
-		for (final Iterator<DefaultEdge> outgoingEdgesIterator = outgoingEdges.iterator(); outgoingEdgesIterator
+		for (final Iterator<VersionedEdge> outgoingEdgesIterator = outgoingEdges.iterator(); outgoingEdgesIterator
 				.hasNext();) {
 
-			final DefaultEdge edge = outgoingEdgesIterator.next();
+			final VersionedEdge edge = outgoingEdgesIterator.next();
 
 			final Artifact childNode = graph.getEdgeTarget(edge);
 

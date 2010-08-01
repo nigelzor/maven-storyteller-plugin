@@ -18,10 +18,11 @@ import org.apache.maven.reporting.MavenReportException;
 import org.apache.maven.reporting.sink.SinkFactory;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.WriterFactory;
+import org.highsource.storyteller.artifact.graph.VersionedEdge;
+import org.highsource.storyteller.artifact.graph.ext.EdgeNameProviders;
 import org.highsource.storyteller.artifact.graph.ext.VertexNameProviders;
 import org.highsource.storyteller.jgrapht.ext.AutoGraphExporter;
 import org.highsource.storyteller.jgrapht.ext.GraphExporter;
-import org.jgrapht.graph.DefaultEdge;
 
 /**
  * @goal report
@@ -40,10 +41,11 @@ public class StorytellerReport extends AbstractDependencyGraphMojo implements Ma
 	 * @readonly
 	 */
 	protected String outputDirectory;
-	
+
 	/**
 	 * The plugin uses GraphViz package to render graphs in formats like PDF and so on. If the <code>dot</code>
 	 * executable is not in PATH, it can be specified manually here.
+	 * 
 	 * @parameter expression="${graphViz.dotFile}" default-value="dot"
 	 */
 	protected String graphVizDotFile;
@@ -66,7 +68,7 @@ public class StorytellerReport extends AbstractDependencyGraphMojo implements Ma
 		} catch (Exception ex) {
 			throw new MavenReportException("Failure generating dependency graph.", ex);
 		}
-		
+
 		sink.head();
 		sink.title();
 		sink.text(getName(locale));
@@ -95,9 +97,11 @@ public class StorytellerReport extends AbstractDependencyGraphMojo implements Ma
 
 	private void generateDependencyGraph() throws MavenReportException {
 		File output = new File(getGraphLocation());
-		GraphExporter<Artifact,DefaultEdge> graphExporter = new AutoGraphExporter<Artifact, DefaultEdge>(graphVizDotFile);
+		GraphExporter<Artifact, VersionedEdge> graphExporter = new AutoGraphExporter<Artifact, VersionedEdge>(
+				graphVizDotFile);
 		try {
-			graphExporter.exportGraph(artifactGraph, VertexNameProviders.ARTIFACT_VERTEX_NAME_PROVIDER, output, getLog());
+			graphExporter.exportGraph(artifactGraph, VertexNameProviders.ARTIFACT_VERTEX_NAME_PROVIDER,
+					EdgeNameProviders.VERSION_EDGE_NAME_PROVIDER, output, getLog());
 		} catch (IOException ioex) {
 			throw new MavenReportException("Error exporting graph.", ioex);
 		}

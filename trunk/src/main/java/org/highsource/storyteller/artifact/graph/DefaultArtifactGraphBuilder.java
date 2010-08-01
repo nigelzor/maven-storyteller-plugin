@@ -17,7 +17,6 @@ import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.codehaus.plexus.logging.Logger;
 import org.highsource.storyteller.plugin.DependencyGraphResolutionListener;
 import org.jgrapht.DirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
 
 public class DefaultArtifactGraphBuilder implements ArtifactGraphBuilder {
 
@@ -26,7 +25,7 @@ public class DefaultArtifactGraphBuilder implements ArtifactGraphBuilder {
 	private ArtifactMetadataSource artifactMetadataSource;
 
 	@SuppressWarnings("rawtypes")
-	public DirectedGraph<Artifact, DefaultEdge> buildArtifactGraph(
+	public DirectedGraph<Artifact, VersionedEdge> buildArtifactGraph(
 			Set<Artifact> artifacts, Artifact originatingArtifact,
 			Map managedVersions, ArtifactRepository localRepository,
 			List<ArtifactRepository> remoteRepositories,
