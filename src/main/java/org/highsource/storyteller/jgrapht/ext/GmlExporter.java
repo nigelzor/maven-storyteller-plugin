@@ -9,18 +9,12 @@ import org.jgrapht.UndirectedGraph;
 import org.jgrapht.ext.EdgeNameProvider;
 import org.jgrapht.ext.VertexNameProvider;
 
-
 /**
  * Exports a graph into a GML file (Graph Modelling Language).
  *
  * <p>For a description of the format see <a
  * href="http://www.infosun.fmi.uni-passau.de/Graphlet/GML/">
  * http://www.infosun.fmi.uni-passau.de/Graphlet/GML/</a>.</p>
- *
- * <p>The objects associated with vertices and edges are exported as labels
- * using their toString() implementation. See the {@link
- * #setPrintLabels(Integer)} method. The default behavior is to export no label
- * information.</p>
  *
  * @author Dimitrios Michail
  */
