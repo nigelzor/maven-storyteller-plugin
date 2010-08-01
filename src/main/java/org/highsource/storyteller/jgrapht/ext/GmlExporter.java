@@ -36,32 +36,8 @@ public class GmlExporter<V, E>
     private static final String tab2 = "\t\t";
     private static final String tab3 = "\t\t\t";
 
-    // TODO jvs 27-Jan-2008:  convert these to enum
-
-    /**
-     * Option to export no vertex or edge labels.
-     */
-    public static final int PRINT_NO_LABELS = 1;
-
-    /**
-     * Option to export only the edge labels.
-     */
-    public static final int PRINT_EDGE_LABELS = 2;
-
-    /**
-     * Option to export both edge and vertex labels.
-     */
-    public static final int PRINT_EDGE_VERTEX_LABELS = 3;
-
-    /**
-     * Option to export only the vertex labels.
-     */
-    public static final int PRINT_VERTEX_LABELS = 4;
-
     //~ Instance fields --------------------------------------------------------
 
-    private Integer printLabels = PRINT_NO_LABELS;
-    
     private final VertexNameProvider<V> vertexIDProvider;
     private final VertexNameProvider<V> vertexLabelProvider;
     
@@ -103,8 +79,7 @@ public class GmlExporter<V, E>
             out.println(tab1 + "node");
             out.println(tab1 + "[");
             out.println(tab2 + "id" + delim + vertexIDProvider.getVertexName(from));
-            if ((printLabels == PRINT_VERTEX_LABELS)
-                || (printLabels == PRINT_EDGE_VERTEX_LABELS))
+            if (vertexLabelProvider != null)
             {
                 out.println(tab2 + "label" + delim + quoted(vertexLabelProvider.getVertexName(from)));
             }
@@ -123,8 +98,7 @@ public class GmlExporter<V, E>
             out.println(tab2 + "source" + delim + s);
             String t = vertexIDProvider.getVertexName(g.getEdgeTarget(edge));
             out.println(tab2 + "target" + delim + t);
-            if ((printLabels == PRINT_EDGE_LABELS)
-                || (printLabels == PRINT_EDGE_VERTEX_LABELS))
+            if (edgeLabelProvider != null)
             {
                 out.println(tab2 + "label" + delim + quoted(edgeLabelProvider.getEdgeName(edge)));
             }
@@ -179,45 +153,6 @@ public class GmlExporter<V, E>
     public void export(Writer output, DirectedGraph<V, E> g)
     {
         export(output, g, true);
-    }
-
-    /**
-     * Set whether to export the vertex and edge labels. The default behavior is
-     * to export no vertex or edge labels.
-     *
-     * @param i What labels to export. Valid options are {@link
-     * #PRINT_NO_LABELS}, {@link #PRINT_EDGE_LABELS}, {@link
-     * #PRINT_EDGE_VERTEX_LABELS}, and {@link #PRINT_VERTEX_LABELS}.
-     *
-     * @throws IllegalArgumentException if a non-supported value is used
-     *
-     * @see #PRINT_NO_LABELS
-     * @see #PRINT_EDGE_LABELS
-     * @see #PRINT_EDGE_VERTEX_LABELS
-     * @see #PRINT_VERTEX_LABELS
-     */
-    public void setPrintLabels(final Integer i)
-    {
-        if ((i != PRINT_NO_LABELS)
-            && (i != PRINT_EDGE_LABELS)
-            && (i != PRINT_EDGE_VERTEX_LABELS)
-            && (i != PRINT_VERTEX_LABELS))
-        {
-            throw new IllegalArgumentException(
-                "Non-supported parameter value: " + Integer.toString(i));
-        }
-        printLabels = i;
-    }
-
-    /**
-     * Get whether to export the vertex and edge labels.
-     *
-     * @return One of the {@link #PRINT_NO_LABELS}, {@link #PRINT_EDGE_LABELS},
-     * {@link #PRINT_EDGE_VERTEX_LABELS}, or {@link #PRINT_VERTEX_LABELS}.
-     */
-    public Integer getPrintLabels()
-    {
-        return printLabels;
     }
 }
 

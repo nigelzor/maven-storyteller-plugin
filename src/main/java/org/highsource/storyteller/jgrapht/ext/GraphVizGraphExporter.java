@@ -11,6 +11,7 @@ import java.io.Writer;
 import org.apache.maven.plugin.logging.Log;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.ext.DOTExporter;
+import org.jgrapht.ext.EdgeNameProvider;
 import org.jgrapht.ext.IntegerNameProvider;
 import org.jgrapht.ext.VertexNameProvider;
 
@@ -24,8 +25,8 @@ public abstract class GraphVizGraphExporter<V, E> implements GraphExporter<V, E>
 
 	protected abstract String getFormat();
 
-	public void exportGraph(DirectedGraph<V, E> graph, VertexNameProvider<V> vertexNameProvider, File targetFile,
-			Log log) throws IOException {
+	public void exportGraph(DirectedGraph<V, E> graph, VertexNameProvider<V> vertexLabelProvider,
+			EdgeNameProvider<E> edgeLabelProvider, File targetFile, Log log) throws IOException {
 
 		if (graphVizDotFile == null) {
 			log.warn("Could not export graph to [" + targetFile.getAbsolutePath() + "], "
@@ -33,7 +34,8 @@ public abstract class GraphVizGraphExporter<V, E> implements GraphExporter<V, E>
 			return;
 		}
 
-		final DOTExporter<V, E> exporter = new DOTExporter<V, E>(new IntegerNameProvider<V>(), vertexNameProvider, null);
+		final DOTExporter<V, E> exporter = new DOTExporter<V, E>(new IntegerNameProvider<V>(), vertexLabelProvider,
+				edgeLabelProvider);
 		final File dotFile = new File(targetFile.getAbsolutePath() + ".dot");
 		dotFile.getParentFile().mkdirs();
 
@@ -51,7 +53,8 @@ public abstract class GraphVizGraphExporter<V, E> implements GraphExporter<V, E>
 			}
 
 		}
-		final String[] command = { graphVizDotFile, "-o", targetFile.getAbsolutePath(), "-T" + getFormat(), dotFile.getAbsolutePath() };
+		final String[] command = { graphVizDotFile, "-o", targetFile.getAbsolutePath(), "-T" + getFormat(),
+				dotFile.getAbsolutePath() };
 		final Process process = Runtime.getRuntime().exec(command);
 
 		final InputStream inputStream = process.getInputStream();

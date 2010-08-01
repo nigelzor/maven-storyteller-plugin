@@ -21,6 +21,7 @@ import org.apache.maven.project.MavenProject;
 import org.highsource.storyteller.artifact.MArchive;
 import org.highsource.storyteller.artifact.MClass;
 import org.highsource.storyteller.artifact.MPackage;
+import org.highsource.storyteller.artifact.graph.VersionedEdge;
 import org.highsource.storyteller.artifact.graph.alg.DescendantsInspector;
 import org.highsource.storyteller.artifact.graph.ext.VertexNameProviders;
 import org.highsource.storyteller.jgrapht.ext.AutoGraphExporter;
@@ -101,7 +102,7 @@ public class RecountMojo extends AbstractDependencyGraphMojo {
 	 */
 	@Override
 	protected DirectedGraph<MArchive, DefaultEdge> buildArchiveDependencyGraph(
-			final DirectedGraph<Artifact, DefaultEdge> artifactGraph, Map<Artifact, MArchive> archives)
+			final DirectedGraph<Artifact, VersionedEdge> artifactGraph, Map<Artifact, MArchive> archives)
 			throws MojoExecutionException {
 		final DirectedGraph<MArchive, DefaultEdge> archiveGraph = super.buildArchiveDependencyGraph(artifactGraph,
 				archives);
@@ -280,7 +281,7 @@ public class RecountMojo extends AbstractDependencyGraphMojo {
 			return;
 		}
 		try {
-			new AutoGraphExporter<V, E>(graphVizDotFile).exportGraph(graph, vertexNameProvider, targetFile, getLog());
+			new AutoGraphExporter<V, E>(graphVizDotFile).exportGraph(graph, vertexNameProvider, null, targetFile, getLog());
 		} catch (IOException ioex) {
 			getLog().error("Could not write the graph to the [" + targetFile.getAbsolutePath() + "].", ioex);
 		}

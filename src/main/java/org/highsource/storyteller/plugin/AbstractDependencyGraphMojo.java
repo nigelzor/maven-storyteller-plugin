@@ -34,6 +34,7 @@ import org.apache.maven.project.artifact.MavenMetadataSource;
 import org.highsource.storyteller.artifact.MArchive;
 import org.highsource.storyteller.artifact.MClass;
 import org.highsource.storyteller.artifact.graph.ArtifactGraphBuilder;
+import org.highsource.storyteller.artifact.graph.VersionedEdge;
 import org.highsource.storyteller.plexus.logging.LogToLoggerAdapter;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
@@ -117,11 +118,11 @@ public abstract class AbstractDependencyGraphMojo extends AbstractMojo {
 	 * @throws MojoExecutionException
 	 *             In case artifacts can not be found or resolved.
 	 */
-	protected DirectedGraph<Artifact, DefaultEdge> buildArtifactDependencyGraph(Set<Artifact> artifacts)
+	protected DirectedGraph<Artifact, VersionedEdge> buildArtifactDependencyGraph(Set<Artifact> artifacts)
 			throws MojoExecutionException {
 		getLog().debug("Building artifact graph.");
 		try {
-			final DirectedGraph<Artifact, DefaultEdge> graph = artifactGraphBuilder.buildArtifactGraph(artifacts,
+			final DirectedGraph<Artifact, VersionedEdge> graph = artifactGraphBuilder.buildArtifactGraph(artifacts,
 					project.getArtifact(), Collections.EMPTY_MAP, localRepository, remoteArtifactRepositories,
 					artifactMetadataSource, null, null, new LogToLoggerAdapter("", getLog()));
 
@@ -144,7 +145,7 @@ public abstract class AbstractDependencyGraphMojo extends AbstractMojo {
 	 *             In case of problems creating archives.
 	 */
 	protected DirectedGraph<MArchive, DefaultEdge> buildArchiveDependencyGraph(
-			final DirectedGraph<Artifact, DefaultEdge> artifactGraph, Map<Artifact, MArchive> archives)
+			final DirectedGraph<Artifact, VersionedEdge> artifactGraph, Map<Artifact, MArchive> archives)
 			throws MojoExecutionException {
 
 		getLog().debug("Building archive dependency graph.");
@@ -154,7 +155,7 @@ public abstract class AbstractDependencyGraphMojo extends AbstractMojo {
 		for (Entry<Artifact, MArchive> entry : archives.entrySet()) {
 			final MArchive archive = entry.getValue();
 			archiveGraph.addVertex(archive);
-			for (DefaultEdge artifactEdge : artifactGraph.incomingEdgesOf(archive.getArtifact())) {
+			for (VersionedEdge artifactEdge : artifactGraph.incomingEdgesOf(archive.getArtifact())) {
 				final Artifact sourceArtifact = artifactGraph.getEdgeSource(artifactEdge);
 				final MArchive sourceArchive = archives.get(sourceArtifact);
 				if (sourceArchive != null) {
@@ -163,7 +164,7 @@ public abstract class AbstractDependencyGraphMojo extends AbstractMojo {
 				}
 			}
 
-			for (DefaultEdge artifactEdge : artifactGraph.outgoingEdgesOf(archive.getArtifact())) {
+			for (VersionedEdge artifactEdge : artifactGraph.outgoingEdgesOf(archive.getArtifact())) {
 				final Artifact targetArtifact = artifactGraph.getEdgeTarget(artifactEdge);
 				final MArchive targetArchive = archives.get(targetArtifact);
 				if (targetArchive != null) {
@@ -249,7 +250,7 @@ public abstract class AbstractDependencyGraphMojo extends AbstractMojo {
 	}
 
 	protected Set<Artifact> dependencyArtifacts;
-	protected DirectedGraph<Artifact, DefaultEdge> artifactGraph;
+	protected DirectedGraph<Artifact, VersionedEdge> artifactGraph;
 	protected Map<Artifact, MArchive> archives;
 	protected DirectedGraph<MArchive, DefaultEdge> archiveDependencyGraph;
 

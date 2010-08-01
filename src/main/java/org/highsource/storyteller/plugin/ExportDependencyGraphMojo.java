@@ -6,10 +6,11 @@ import java.io.IOException;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.highsource.storyteller.artifact.graph.VersionedEdge;
+import org.highsource.storyteller.artifact.graph.ext.EdgeNameProviders;
 import org.highsource.storyteller.artifact.graph.ext.VertexNameProviders;
 import org.highsource.storyteller.jgrapht.ext.AutoGraphExporter;
 import org.highsource.storyteller.jgrapht.ext.GraphExporter;
-import org.jgrapht.graph.DefaultEdge;
 
 /**
  * Export the dependency graph of the current project, or of a specified artifact.
@@ -40,11 +41,11 @@ public class ExportDependencyGraphMojo extends AbstractSpecifiableArtifactDepend
 		super.execute();
 
 		// Create a graph exporter
-		GraphExporter<Artifact, DefaultEdge> graphExporter = new AutoGraphExporter<Artifact, DefaultEdge>(
+		GraphExporter<Artifact, VersionedEdge> graphExporter = new AutoGraphExporter<Artifact, VersionedEdge>(
 				graphVizDotFile);
 		// Export archive dependency graph
 		try {
-			graphExporter.exportGraph(artifactGraph, VertexNameProviders.ARTIFACT_VERTEX_NAME_PROVIDER, file, getLog());
+			graphExporter.exportGraph(artifactGraph, VertexNameProviders.ARTIFACT_VERTEX_NAME_PROVIDER, EdgeNameProviders.VERSION_EDGE_NAME_PROVIDER, file, getLog());
 		} catch (IOException ioex) {
 			throw new MojoExecutionException("Error exporting graph.", ioex);
 		}
