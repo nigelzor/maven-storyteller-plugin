@@ -2,6 +2,7 @@ package org.highsource.storyteller.plugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -35,6 +36,18 @@ public class ExportDependencyGraphMojo extends AbstractSpecifiableArtifactDepend
 	 * @parameter expression="${graphViz.dotFile}" default-value="dot"
 	 */
 	protected String graphVizDotFile;
+	
+	/**
+	 * Use Batik to render PNGs instead of Graphviz's default renderer.
+	 * @parameter expression="${useBatik}" default-value="false"
+	 */
+	private boolean useBatik;
+	
+	/**
+	 * Hints to pass to Batik when rendering.
+	 * @parameter
+	 */
+	private Map<String, String> batikHints;
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
@@ -42,7 +55,7 @@ public class ExportDependencyGraphMojo extends AbstractSpecifiableArtifactDepend
 
 		// Create a graph exporter
 		GraphExporter<Artifact, VersionedEdge> graphExporter = new AutoGraphExporter<Artifact, VersionedEdge>(
-				graphVizDotFile);
+				graphVizDotFile, useBatik, batikHints);
 		// Export archive dependency graph
 		try {
 			graphExporter.exportGraph(artifactGraph, VertexNameProviders.ARTIFACT_VERTEX_NAME_PROVIDER, EdgeNameProviders.VERSION_EDGE_NAME_PROVIDER, file, getLog());

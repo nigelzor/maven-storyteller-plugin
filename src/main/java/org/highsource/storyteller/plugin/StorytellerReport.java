@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.doxia.sink.Sink;
@@ -49,6 +50,18 @@ public class StorytellerReport extends AbstractDependencyGraphMojo implements Ma
 	 * @parameter expression="${graphViz.dotFile}" default-value="dot"
 	 */
 	protected String graphVizDotFile;
+	
+	/**
+	 * Use Batik to render PNGs instead of Graphviz's default renderer.
+	 * @parameter expression="${useBatik}" default-value="false"
+	 */
+	private boolean useBatik;
+	
+	/**
+	 * Hints to pass to Batik when rendering.
+	 * @parameter
+	 */
+	private Map<String, String> batikHints;
 
 	public String getOutputName() {
 		return "storyteller";
@@ -98,7 +111,7 @@ public class StorytellerReport extends AbstractDependencyGraphMojo implements Ma
 	private void generateDependencyGraph() throws MavenReportException {
 		File output = new File(getGraphLocation());
 		GraphExporter<Artifact, VersionedEdge> graphExporter = new AutoGraphExporter<Artifact, VersionedEdge>(
-				graphVizDotFile);
+				graphVizDotFile, useBatik, batikHints);
 		try {
 			graphExporter.exportGraph(artifactGraph, VertexNameProviders.ARTIFACT_VERTEX_NAME_PROVIDER,
 					EdgeNameProviders.VERSION_EDGE_NAME_PROVIDER, output, getLog());

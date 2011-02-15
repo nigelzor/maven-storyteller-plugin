@@ -12,16 +12,21 @@ import org.jgrapht.ext.EdgeNameProvider;
 import org.jgrapht.ext.VertexNameProvider;
 
 public class AutoGraphExporter<V, E> implements GraphExporter<V, E> {
-
 	private final Map<String, GraphExporter<V, E>> exporters;
 
-	public AutoGraphExporter(final String graphVizDotFile) {
+	public AutoGraphExporter(final String graphVizDotFile, boolean useBatik, Map<String, String> batikHints) {
 		final Map<String, GraphExporter<V, E>> exporters = new HashMap<String, GraphExporter<V, E>>();
 		exporters.put("dot", new DOTGraphExporter<V, E>());
 		exporters.put("gml", new GMLGraphExporter<V, E>());
 		exporters.put("graphml", new GraphMLGraphExporter<V, E>());
-		exporters.put("pdf", new PDFGraphExporter<V, E>(graphVizDotFile));
-		exporters.put("png", new PNGGraphExporter<V, E>(graphVizDotFile));
+		exporters.put("pdf", new GraphVizGraphExporter<V, E>(graphVizDotFile, "pdf"));
+		exporters.put("svg", new GraphVizGraphExporter<V, E>(graphVizDotFile, "svg"));
+		if (useBatik) {
+			exporters.put("png", new BatikGraphVizGraphExporter<V, E>(graphVizDotFile,
+					BatikGraphVizGraphExporter.parseHints(batikHints)));
+		} else {
+			exporters.put("png", new GraphVizGraphExporter<V, E>(graphVizDotFile, "png"));
+		}
 		this.exporters = exporters;
 	}
 
