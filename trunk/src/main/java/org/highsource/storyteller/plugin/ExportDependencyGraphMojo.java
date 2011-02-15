@@ -24,7 +24,7 @@ public class ExportDependencyGraphMojo extends AbstractSpecifiableArtifactDepend
 
 	/**
 	 * File to export the dependency graph to. Format of the exported graph will be inferred from the file's
-	 * extension. (choose from: pdf, png, dot, gml, graphml)
+	 * extension. (choose from: pdf, svg, png, dot, gml, graphml)
 	 * @parameter expression="${file}" default-value="dependencies.graphml"
 	 * @required
 	 */
