@@ -2,13 +2,11 @@
 <metadata>
   <groupId>org.highsource.storyteller</groupId>
   <artifactId>maven-storyteller-plugin</artifactId>
-  <version>0.1-SNAPSHOT</version>
+  <version>0.2-SNAPSHOT</version>
   <versioning>
-    <latest>0.2-SNAPSHOT</latest>
-    <versions>
-      <version>0.1-SNAPSHOT</version>
-      <version>0.2-SNAPSHOT</version>
-    </versions>
+    <snapshot>
+      <buildNumber>2</buildNumber>
+    </snapshot>
     <lastUpdated>20110215012212</lastUpdated>
   </versioning>
 </metadata>
