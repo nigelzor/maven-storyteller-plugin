@@ -3,7 +3,6 @@ package org.highsource.storyteller.plugin;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.DefaultArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
-import org.apache.maven.artifact.repository.layout.LegacyRepositoryLayout;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.ProjectBuildingException;
@@ -72,10 +71,12 @@ public abstract class AbstractSpecifiableArtifactDependencyGraphMojo extends Abs
 		}
 	}
 
-	private void initSpecifiedRepository() {
+	private void initSpecifiedRepository() throws MojoExecutionException {
 		if (repositoryURL != null) {
-			remoteArtifactRepositories.add(new DefaultArtifactRepository(repositoryId, repositoryURL,
-					"legacy".equals(repositoryLayout) ? new LegacyRepositoryLayout() : new DefaultRepositoryLayout()));
+			if ("legacy".equals(repositoryLayout)) {
+				throw new MojoExecutionException("Legacy repository layout is no longer supported");
+			}
+			remoteArtifactRepositories.add(new DefaultArtifactRepository(repositoryId, repositoryURL, new DefaultRepositoryLayout()));
 		}
 	}
 
