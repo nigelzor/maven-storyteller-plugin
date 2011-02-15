@@ -67,6 +67,18 @@ public class RecountMojo extends AbstractDependencyGraphMojo {
 	 * @parameter expression="${graphViz.dotFile}" default-value="dot"
 	 */
 	private String graphVizDotFile;
+	
+	/**
+	 * Use Batik to render PNGs instead of Graphviz's default renderer.
+	 * @parameter expression="${useBatik}" default-value="false"
+	 */
+	private boolean useBatik;
+	
+	/**
+	 * Hints to pass to Batik when rendering.
+	 * @parameter
+	 */
+	private Map<String, String> batikHints;
 
 	private DirectedGraph<MClass, DefaultEdge> classDependencyGraph;
 	private Collection<MArchive> rootArchives;
@@ -281,7 +293,7 @@ public class RecountMojo extends AbstractDependencyGraphMojo {
 			return;
 		}
 		try {
-			new AutoGraphExporter<V, E>(graphVizDotFile).exportGraph(graph, vertexNameProvider, null, targetFile, getLog());
+			new AutoGraphExporter<V, E>(graphVizDotFile, useBatik, batikHints).exportGraph(graph, vertexNameProvider, null, targetFile, getLog());
 		} catch (IOException ioex) {
 			getLog().error("Could not write the graph to the [" + targetFile.getAbsolutePath() + "].", ioex);
 		}

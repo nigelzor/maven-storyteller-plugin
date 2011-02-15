@@ -15,15 +15,16 @@ import org.jgrapht.ext.EdgeNameProvider;
 import org.jgrapht.ext.IntegerNameProvider;
 import org.jgrapht.ext.VertexNameProvider;
 
-public abstract class GraphVizGraphExporter<V, E> implements GraphExporter<V, E> {
-	private final String graphVizDotFile;
+public class GraphVizGraphExporter<V, E> implements GraphExporter<V, E> {
 
-	public GraphVizGraphExporter(String graphVizDotFile) {
+	private final String graphVizDotFile;
+	private final String format;
+
+	public GraphVizGraphExporter(String graphVizDotFile, String format) {
 		super();
 		this.graphVizDotFile = graphVizDotFile;
+		this.format = format;
 	}
-
-	protected abstract String getFormat();
 
 	public void exportGraph(DirectedGraph<V, E> graph, VertexNameProvider<V> vertexLabelProvider,
 			EdgeNameProvider<E> edgeLabelProvider, File targetFile, Log log) throws IOException {
@@ -53,7 +54,7 @@ public abstract class GraphVizGraphExporter<V, E> implements GraphExporter<V, E>
 			}
 
 		}
-		final String[] command = { graphVizDotFile, "-o", targetFile.getAbsolutePath(), "-T" + getFormat(),
+		final String[] command = { graphVizDotFile, "-o", targetFile.getAbsolutePath(), "-T" + format,
 				dotFile.getAbsolutePath() };
 		final Process process = Runtime.getRuntime().exec(command);
 
