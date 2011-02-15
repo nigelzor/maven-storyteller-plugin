@@ -8,7 +8,6 @@ import java.io.Writer;
 import javax.xml.transform.TransformerConfigurationException;
 
 import org.apache.maven.plugin.logging.Log;
-import org.highsource.storyteller.io.NestedIOException;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.ext.EdgeNameProvider;
 import org.jgrapht.ext.GraphMLExporter;
@@ -29,9 +28,9 @@ public class GraphMLGraphExporter<V, E> implements GraphExporter<V, E> {
 			writer = new FileWriter(targetFile);
 			exporter.export(writer, graph);
 		} catch (TransformerConfigurationException tcex) {
-			throw new NestedIOException(tcex);
+			throw new IOException(tcex);
 		} catch (SAXException saxex) {
-			throw new NestedIOException(saxex);
+			throw new IOException(saxex);
 		} finally {
 			if (writer != null) {
 				try {

@@ -72,7 +72,7 @@ public abstract class GraphVizGraphExporter<V, E> implements GraphExporter<V, E>
 				log.warn("GraphViz [dot] process quit with exit value [" + exitValue + "].");
 			}
 		} catch (InterruptedException iex) {
-			log.warn("GraphViz [dot] prcoessess was interrupted.", iex);
+			log.warn("GraphViz [dot] process was interrupted.", iex);
 		}
 		dotFile.delete();
 	}
